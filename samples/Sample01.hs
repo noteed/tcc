@@ -34,10 +34,8 @@ main = do
     
   c_relocate s
 
---    tcc_get_symbol(s, &val, "foo");
---    func = (void *)val;
-
---    func(32);
+  Just addr <- getSymbol s "foo"
+  c_calli addr 5
 
   c_delete s
 

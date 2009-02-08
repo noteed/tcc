@@ -14,11 +14,13 @@ Cabal-Version: >= 1.2
 library
   build-depends:     base >= 3, bytestring
   exposed-modules:     Language.TCC
+  extensions:          ForeignFunctionInterface,
+                       CPP
   ghc-options:         -Wall
                        -O2
                        -fvia-C
-  extensions:          ForeignFunctionInterface,
-                       CPP
-  includes:            libtcc.h
+  include-dirs:        include
+  includes:            libtcc.h, convenience.h
+  c-sources:           cbits/convenience.c
   extra-libraries:     dl, tcc
 

@@ -18,10 +18,12 @@
 module Language.TCC where
 
 import Foreign.C        (CInt, CULong)
-import Foreign.C.String (CString)
+import Foreign.C.String (CString, withCString)
 import Foreign.Ptr      (Ptr, FunPtr)
 import Data.Word        (Word32)
-import Foreign.Storable (Storable)
+import Foreign.Storable (peek, Storable, sizeOf)
+import Foreign.Marshal.Alloc (free, mallocBytes)
+import Control.Exception     (bracket)
 
 {- From Don's nano-md5, used as an example to make the bindings.
 
@@ -82,6 +84,7 @@ foreign import ccall "openssl/md5.h MD5" c_md5
 
 -}
 
+--------------------------------------------------------------------
 --
 -- Bindings against TCC 0.9.24
 --
@@ -194,4 +197,34 @@ foreign import ccall "libtcc.h tcc_relocate" c_relocate
 -- int tcc_get_symbol(TCCState *s, unsigned long *pval, const char *name);
 foreign import ccall "libtcc.h tcc_get_symbol" c_get_symbol
   :: TCCState -> Ptr CULong -> CString -> IO CInt
+
+--------------------------------------------------------------------
+--
+-- Convenience functions
+--
+
+-- Similar to alloca but return both the computation result and
+-- the value of the temporarily allocated block of memory.
+-- See the code of allocaBytes for GHC specific way rewrite
+-- this (with newPinedByteArray).
+withAlloca :: Storable a => (Ptr a -> IO b) -> IO (a,b)
+withAlloca f = bracket (doMalloc undefined) free g
+  where g m = do b <- f m
+                 a <- peek m
+                 return (a,b)
+        doMalloc :: Storable a' => a' -> IO (Ptr a')
+        doMalloc dummy = mallocBytes $ sizeOf dummy
+
+getSymbol :: TCCState -> String -> IO (Maybe CULong)
+getSymbol s name = do
+  (addr,ret) <- withCString name (\str ->
+    withAlloca (\addr -> c_get_symbol s addr str))
+  if ret == 0 then return (Just addr)
+              else return Nothing
+
+foreign import ccall "convenience.h call" c_call
+  :: CULong -> IO ()
+
+foreign import ccall "convenience.h calli" c_calli
+  :: CULong -> CInt -> IO ()
 
