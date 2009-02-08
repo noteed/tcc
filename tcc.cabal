@@ -1,0 +1,24 @@
+name:                tcc
+version:             0.0
+description:         Bindings to the Tiny C Compiler library.
+synopsis:            Bindings to the Tiny C Compiler library.
+license:             BSD3
+license-file:        LICENSE
+homepage:            http://
+author:              Vo Minh Thu
+category:            Language
+maintainer:          <noteed@gmail.com>
+build-type:          Simple
+Cabal-Version: >= 1.2
+
+library
+  build-depends:     base >= 3, bytestring
+  exposed-modules:     Language.TCC
+  ghc-options:         -Wall
+                       -O2
+                       -fvia-C
+  extensions:          ForeignFunctionInterface,
+                       CPP
+  includes:            libtcc.h
+  extra-libraries:     dl, tcc
+
