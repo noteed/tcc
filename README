@@ -1,12 +1,18 @@
 Haskell bindings to the Tiny C Compiler library (libtcc).
 
-The Cabal file builds against libtcc.so but the source
-distribution file doesn't provide one. To create it,
-instead of
+To use the bindings in ghci, it is necessary to have the
+.so version of libtcc. But the source distribution of
+TCC doesn't provide one.
+
+
+When building TCC, instead of
+
  > ./configure
  > make
  > make install
-use for instance
+
+you can use for instance
+
  > ./configure --extra-cflags="-fPIC"
  > make
  > gcc -shared -Wl,-soname,libtcc.so -o libtcc.so libtcc.o
