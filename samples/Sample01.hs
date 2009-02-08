@@ -16,7 +16,7 @@ myProgram =
   ++ "{\n"
   ++ "    printf(\"Hello World!\\n\");\n"
   ++ "    printf(\"fib(%d) = %d\\n\", n, fib(n));\n"
-  ++ "    printf(\"add(%d, %d) = %d\\n\", n, 2 * n, add(n, 2 * n));\n"
+  ++ "    /* printf(\"add(%d, %d) = %d\\n\", n, 2 * n, add(n, 2 * n)); */\n"
   ++ "    return 0;\n"
   ++ "}\n"
 

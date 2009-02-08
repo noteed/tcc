@@ -98,8 +98,9 @@ foreign import ccall "libtcc.h tcc_delete" c_delete
   :: TCCState -> IO ()
 
 -- void tcc_enable_debug(TCCState *s);
-foreign import ccall "libtcc.h tcc_enable_debug" c_enable_debug
-  :: TCCState -> IO ()
+-- Appears in libtcc.h but not in libtcc.a ...
+--foreign import ccall "libtcc.h tcc_enable_debug" c_enable_debug
+--  :: TCCState -> IO ()
 
 -- void tcc_set_error_func(TCCState *s, void *error_opaque,
 --                         void (*error_func)(void *opaque, const char *msg));
