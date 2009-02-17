@@ -12,10 +12,9 @@ build-type:          Simple
 Cabal-Version: >= 1.2
 
 library
-  build-depends:     base >= 3, bytestring
+  build-depends:       base
   exposed-modules:     Language.TCC
-  extensions:          ForeignFunctionInterface,
-                       CPP
+  extensions:          ForeignFunctionInterface
   ghc-options:         -Wall
                        -O2
                        -fvia-C
